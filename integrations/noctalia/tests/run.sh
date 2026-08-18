@@ -14,7 +14,7 @@
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN="${HERE}/../magicpods"
+PLUGIN="${HERE}/../../../magicpods"
 PYTHON="${PYTHON:-python3}"
 PORT="${PORT:-22020}"
 

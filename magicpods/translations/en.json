@@ -4,6 +4,10 @@
       "label": "Daemon URL",
       "description": "WebSocket address of the MagicPodsCore daemon (default ws://127.0.0.1:2020)."
     },
+    "python_path": {
+      "label": "Python path",
+      "description": "Absolute path to a Python 3 interpreter. Leave empty to use python3 from PATH (needed on NixOS/immutable distros where the session PATH may lack it)."
+    },
     "battery_source": {
       "label": "Bar battery source",
       "description": "Which battery level the bar widget shows.",

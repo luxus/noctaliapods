@@ -54,6 +54,23 @@ local function batterySource()
   return "auto"
 end
 
+-- Python interpreter: an explicit absolute path (for NixOS / immutable distros
+-- where PATH may lack python3 in the Noctalia session), else "python3" on PATH.
+local function pythonBin()
+  local p = noctalia.getConfig("python_path")
+  if type(p) == "string" and noctalia.string.trim(p) ~= "" then
+    return noctalia.string.trim(p)
+  end
+  return "python3"
+end
+
+local function pythonAvailable(bin)
+  if string.sub(bin, 1, 1) == "/" then
+    return noctalia.fileExists(bin)
+  end
+  return noctalia.commandExists(bin)
+end
+
 local function bridgePath()
   local dir = noctalia.pluginDir()
   if type(dir) ~= "string" or dir == "" then
@@ -161,14 +178,15 @@ local function startStream()
     noctalia.log("magicpods: could not resolve plugin directory")
     return
   end
-  if not noctalia.commandExists("python3") then
-    noctalia.log("magicpods: python3 not found on PATH; bridge cannot start")
+  local python = pythonBin()
+  if not pythonAvailable(python) then
+    noctalia.log("magicpods: python interpreter '" .. python .. "' not found; bridge cannot start")
     model.bridge = false
     publishAll()
     return
   end
 
-  local cmd = string.format("python3 %s --url %s stream", shellQuote(path), shellQuote(daemonUrl()))
+  local cmd = string.format("%s %s --url %s stream", shellQuote(python), shellQuote(path), shellQuote(daemonUrl()))
   local ok = noctalia.runStream(cmd, function(line)
     line = noctalia.string.trim(line or "")
     if line == "" then
@@ -190,7 +208,8 @@ end
 -- Send a single request to the daemon via a one-shot bridge invocation.
 local function sendToDaemon(request)
   local path = bridgePath()
-  if path == nil or not noctalia.commandExists("python3") then
+  local python = pythonBin()
+  if path == nil or not pythonAvailable(python) then
     return
   end
   local json = noctalia.json.encode(request)
@@ -199,7 +218,8 @@ local function sendToDaemon(request)
     return
   end
   local cmd = string.format(
-    "python3 %s --url %s send %s",
+    "%s %s --url %s send %s",
+    shellQuote(python),
     shellQuote(path),
     shellQuote(daemonUrl()),
     shellQuote(json)

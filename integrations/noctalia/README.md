@@ -63,6 +63,69 @@ Then, in Noctalia: **Settings → Plugins → enable “MagicPods”**, and add 
 widget from the Add-widget picker (or bind `noctalia msg panel-toggle
 steam3d/magicpods:panel`).
 
+## Adding to Noctalia as a plugin source
+
+The plugin lives at the repository root in `magicpods/`, with a `catalog.toml`
+at the root, so Noctalia can consume it two ways (Settings → Plugins → Add
+source):
+
+- **Git URL source** — add this repo's git URL. Noctalia reads the root
+  `catalog.toml` and materializes the plugin from the `magicpods/` subdir (the
+  convention for id `steam3d/magicpods`). The installed tip needs a host
+  supporting `plugin_api = 9`.
+- **Local directory source** — add the repo root (or the `magicpods/` parent)
+  as a local source; Noctalia scans one level deep for `<dir>/plugin.toml`.
+- **Built-in local dir** — drop/symlink `magicpods/` into
+  `~/.local/share/noctalia/plugins/` (what `install.sh` does).
+
+## NixOS (flake: Home Manager or hjem)
+
+A flake at the repo root exposes the daemon package, the plugin, and modules.
+The daemon can't use its CMake `FetchContent` build under the Nix sandbox, so
+the package pre-fetches the pinned C++ dependencies and injects them
+(`FETCHCONTENT_SOURCE_DIR_*` + `FETCHCONTENT_FULLY_DISCONNECTED`).
+
+Flake outputs:
+
+- `packages.<system>.magicpodscore` — the daemon.
+- `packages.<system>.magicpods-plugin` — the plugin as a file tree.
+- `homeManagerModules.default` — Home Manager module.
+- `nixosModules.magicpods-hjem` — NixOS module for [hjem](https://github.com/feel-co/hjem) users.
+
+### Home Manager
+
+```nix
+{
+  inputs.magicpods.url = "github:steam3d/MagicPodsCore"; # or your fork
+  # ...
+  imports = [ inputs.magicpods.homeManagerModules.default ];
+  services.magicpods.enable = true;
+  # optional: services.magicpods.python = pkgs.python3;
+}
+```
+
+This links the plugin into `~/.local/share/noctalia/plugins/magicpods`, puts
+`python3` (for `bridge.py`) and the daemon on PATH, and runs `magicpodscore` as a
+systemd user service.
+
+### hjem
+
+```nix
+{
+  imports = [ inputs.magicpods.nixosModules.magicpods-hjem ]; # hjem's module also imported
+  services.magicpods.enable = true;
+  services.magicpods.user   = "alice";
+}
+```
+
+This places the plugin via `hjem.users.<user>.files`, adds `python3` + the daemon
+system-wide, enables BlueZ, and runs the daemon as a user service.
+
+> Because the daemon speaks WebSocket and Luau cannot, the bridge shells out to
+> `python3`. On NixOS make sure `python3` is on the Noctalia session PATH (the
+> modules above do this) or set the plugin's **Python path** setting to an
+> absolute interpreter path.
+
 ### Manual daemon control
 
 If you prefer not to use the service, run the daemon yourself:
@@ -82,6 +145,7 @@ Configured under **Settings → Plugins → MagicPods** (gear icon):
 | Setting | Meaning |
 | --- | --- |
 | Daemon URL | WebSocket address of the daemon (default `ws://127.0.0.1:2020`). |
+| Python path | Absolute path to a Python 3 interpreter. Empty = `python3` from PATH (set this on NixOS/immutable distros where the session PATH may lack it). |
 | Bar battery source | Which battery the bar shows: lowest earbud, left, right, or case. |
 | Hide when disconnected | Hide the bar widget when nothing is connected. |
 | Show battery label | Show the battery percentage next to the icon (per widget). |

@@ -24,5 +24,6 @@ Enable the plugin, add the **MagicPods** widget to a bar, or toggle the panel:
 noctalia msg panel-toggle steam3d/magicpods:panel
 ```
 
-See [`../README.md`](../README.md) for the full install script (daemon build +
-systemd service + plugin link) and troubleshooting.
+See [`integrations/noctalia/README.md`](../integrations/noctalia/README.md) for
+the full install script (daemon build + systemd service + plugin link), NixOS
+(Home Manager / hjem) usage, and troubleshooting.

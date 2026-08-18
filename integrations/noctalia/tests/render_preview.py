@@ -16,7 +16,7 @@ import tempfile
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PLUGIN = os.path.join(HERE, "..", "magicpods")
+PLUGIN = os.path.join(HERE, "..", "..", "..", "magicpods")
 LUAU = os.environ.get("LUAU", "/tmp/luau-dl/luau")
 S = 2  # render scale
 
@@ -258,8 +258,8 @@ def render_tree(tree, width, out_path, title):
 
 def main():
     combined = tempfile.NamedTemporaryFile("w", suffix=".luau", delete=False)
-    for f in ["host_stub.luau", "../magicpods/service.luau", "../magicpods/bar.luau",
-              "../magicpods/panel.luau", "dump_trees.luau"]:
+    for f in ["host_stub.luau", "../../../magicpods/service.luau", "../../../magicpods/bar.luau",
+              "../../../magicpods/panel.luau", "dump_trees.luau"]:
         with open(os.path.join(HERE, f)) as fh:
             combined.write(fh.read())
             combined.write("\n")

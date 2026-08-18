@@ -28,6 +28,16 @@ label_key = "settings.daemon_url.label"
 description_key = "settings.daemon_url.description"
 default = "ws://127.0.0.1:2020"
 
+# Absolute path to a Python 3 interpreter. Leave empty to use "python3" from
+# PATH. Useful on NixOS / immutable distros where PATH may not include python3
+# in the Noctalia session.
+[[setting]]
+key = "python_path"
+type = "string"
+label_key = "settings.python_path.label"
+description_key = "settings.python_path.description"
+default = ""
+
 [[setting]]
 key = "battery_source"
 type = "select"

@@ -227,6 +227,9 @@ noctalia = {
   commandExists = function()
     return true
   end,
+  fileExists = function()
+    return true
+  end,
   pluginDir = function()
     return "/tmp/magicpods"
   end,

@@ -25,7 +25,7 @@ die() {
 # Repo root = two levels up from this script (integrations/noctalia/install.sh).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-PLUGIN_SRC="${SCRIPT_DIR}/magicpods"
+PLUGIN_SRC="${REPO_ROOT}/magicpods"
 
 BIN_DIR="${HOME}/.local/bin"
 UNIT_DIR="${XDG_CONFIG_HOME:-${HOME}/.config}/systemd/user"
