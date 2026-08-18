@@ -80,20 +80,25 @@ echo "=============================================="
 if [ -z "${LUAU_BIN}" ]; then
   echo "SKIP: luau interpreter not found (set LUAU=/path/to/luau)"
 else
-  # Compile check each entry (syntax).
-  for f in service.luau bar.luau panel.luau; do
-    if "${LUAU_BIN%luau}luau-compile" -O0 "${PLUGIN}/${f}" >/dev/null 2>&1 \
-      || "${LUAU_BIN}" --help >/dev/null 2>&1; then
-      :
-    fi
-  done
-
   COMBINED="$(mktemp --suffix=.luau)"
   cat "${HERE}/host_stub.luau" \
       "${PLUGIN}/service.luau" \
       "${PLUGIN}/bar.luau" \
       "${PLUGIN}/panel.luau" \
       "${HERE}/test_plugin.luau" > "${COMBINED}"
+
+  # Static analysis (host globals are defined in the stub). Type errors fail;
+  # concatenation-only lints (duplicate render, unused entry points) are noise.
+  ANALYZE="${LUAU_BIN%luau}luau-analyze"
+  if [ -x "${ANALYZE}" ] || command -v "${ANALYZE}" >/dev/null 2>&1; then
+    if "${ANALYZE}" "${COMBINED}" >/dev/null 2>&1; then
+      echo "luau-analyze: no type errors"
+    else
+      echo "luau-analyze: reported issues (see below)"
+      "${ANALYZE}" "${COMBINED}" 2>&1 | grep TypeError | grep -v "Unknown global" || true
+    fi
+  fi
+
   if "${LUAU_BIN}" "${COMBINED}"; then
     echo "luau harness: OK"
   else

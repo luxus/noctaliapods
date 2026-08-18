@@ -132,6 +132,7 @@ local function renderAnc()
         glyph = mode.glyph,
         text = noctalia.tr(mode.key),
         fontSize = 12,
+        flexGrow = 1,
         variant = isSelected and "primary" or "outline",
         enabled = anc.readonly ~= true and type(address) == "string",
         onClick = function()
@@ -143,10 +144,18 @@ local function renderAnc()
   if #buttons == 0 then
     return nil
   end
-  return ui.column({ gap = 6 }, {
-    ui.label({ text = noctalia.tr("panel.noise_control"), fontWeight = "bold", color = "on_surface" }),
-    ui.row({ gap = 6, justify = "start" }, buttons),
-  })
+  -- Two buttons per row so up to four modes fit a narrow panel without clipping.
+  local rows = { ui.label({ text = noctalia.tr("panel.noise_control"), fontWeight = "bold", color = "on_surface" }) }
+  local i = 1
+  while i <= #buttons do
+    local pair = { buttons[i] }
+    if buttons[i + 1] ~= nil then
+      table.insert(pair, buttons[i + 1])
+    end
+    table.insert(rows, ui.row({ key = "anc-row-" .. tostring(i), gap = 6 }, pair))
+    i += 2
+  end
+  return ui.column({ gap = 6 }, rows)
 end
 
 local function renderToggles()
