@@ -1,0 +1,75 @@
+# MagicPods — AirPods / Beats / Galaxy Buds control for Noctalia v5.
+#
+# A headless [[service]] owns the connection to the MagicPodsCore daemon (via
+# bridge.py, since the daemon speaks WebSocket and Luau does not). It publishes
+# device state through noctalia.state; the bar [[widget]] and the [[panel]] are
+# thin clients that render that state and send commands back to the service.
+#
+# Inspired by github.com/tomycostantino/omarchpods (a MagicPodsCore front-end
+# for Omarchy); this brings the same idea to Noctalia's native plugin system.
+
+id = "steam3d/magicpods"
+name = "MagicPods"
+version = "1.0.0"
+plugin_api = 9
+author = "steam3d, andreylitvintsev, tomycostantino"
+license = "GPL-3.0"
+repository = "https://github.com/steam3d/MagicPodsCore"
+tags = ["bluetooth", "audio", "airpods", "headphones", "utility"]
+icon = "headphones"
+description = "Battery, noise control and connection management for AirPods, Beats and Galaxy Buds via the MagicPodsCore daemon."
+
+# --- Plugin-level settings (shared by the service, widget and panel) ---------
+
+[[setting]]
+key = "daemon_url"
+type = "string"
+label_key = "settings.daemon_url.label"
+description_key = "settings.daemon_url.description"
+default = "ws://127.0.0.1:2020"
+
+[[setting]]
+key = "battery_source"
+type = "select"
+label_key = "settings.battery_source.label"
+description_key = "settings.battery_source.description"
+default = "auto"
+options = [
+  { value = "auto", label_key = "settings.battery_source.options.auto" },
+  { value = "left", label_key = "settings.battery_source.options.left" },
+  { value = "right", label_key = "settings.battery_source.options.right" },
+  { value = "case", label_key = "settings.battery_source.options.case" },
+]
+
+[[setting]]
+key = "hide_when_disconnected"
+type = "bool"
+label_key = "settings.hide_when_disconnected.label"
+description_key = "settings.hide_when_disconnected.description"
+default = false
+
+# --- Entries -----------------------------------------------------------------
+
+[[service]]
+id = "daemon"
+entry = "service.luau"
+
+[[widget]]
+id = "bar"
+entry = "bar.luau"
+
+  [[widget.setting]]
+  key = "show_label"
+  type = "bool"
+  label_key = "settings.show_label.label"
+  description_key = "settings.show_label.description"
+  default = true
+
+[[panel]]
+id = "panel"
+entry = "panel.luau"
+width = 360
+height = 460
+placement = "attached"
+position = "auto"
+open_near_click = true

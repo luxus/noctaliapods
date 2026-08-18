@@ -1,0 +1,67 @@
+{
+  "settings": {
+    "daemon_url": {
+      "label": "Daemon URL",
+      "description": "WebSocket address of the MagicPodsCore daemon (default ws://127.0.0.1:2020)."
+    },
+    "battery_source": {
+      "label": "Bar battery source",
+      "description": "Which battery level the bar widget shows.",
+      "options": {
+        "auto": "Lowest earbud",
+        "left": "Left earbud",
+        "right": "Right earbud",
+        "case": "Case"
+      }
+    },
+    "hide_when_disconnected": {
+      "label": "Hide when disconnected",
+      "description": "Hide the bar widget when no supported headphones are connected."
+    },
+    "show_label": {
+      "label": "Show battery label",
+      "description": "Show the battery percentage next to the icon on a horizontal bar."
+    }
+  },
+  "tooltip": {
+    "no_daemon": "MagicPodsCore daemon not reachable",
+    "disconnected": "No headphones connected",
+    "headphones": "Headphones",
+    "charging": "(charging)",
+    "battery": "{name}: {battery}%"
+  },
+  "panel": {
+    "title": "MagicPods",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "battery": "Battery",
+    "noise_control": "Noise control",
+    "features": "Features",
+    "devices": "Devices",
+    "bluetooth": "Bluetooth",
+    "no_daemon": "MagicPodsCore daemon not reachable.\nStart the magicpodscore service and try again.",
+    "bluetooth_off": "Bluetooth is turned off.",
+    "no_device": "No supported headphones found."
+  },
+  "anc": {
+    "off": "Off",
+    "transparency": "Transparency",
+    "adaptive": "Adaptive",
+    "noise_cancellation": "Noise cancellation"
+  },
+  "toggles": {
+    "conversation_awareness": "Conversation awareness",
+    "personalized_volume": "Personalized volume",
+    "anc_one_airpod": "Noise cancellation with one AirPod"
+  },
+  "battery": {
+    "left": "Left",
+    "right": "Right",
+    "case": "Case",
+    "single": "Battery"
+  },
+  "devices": {
+    "connect": "Connect",
+    "disconnect": "Disconnect"
+  }
+}
