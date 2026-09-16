@@ -1,0 +1,21 @@
+# Noctalia plugin catalog for this repository.
+#
+# This lets the repo be added directly as a git plugin source in Noctalia
+# (Settings -> Plugins -> Add source -> this repo's git URL). Noctalia reads this
+# file at the repo root, then materializes the plugin from the "<plugin>/"
+# subdir named after the id's second segment: "steam3d/magicpods" -> "magicpods/".
+#
+# The tip (this commit) is installed when the host supports plugin_api 9. Older
+# hosts would need [[plugin.release]] rows pinning a commit `rev` per API level;
+# none are declared yet because 9 is the first published API level.
+
+[[plugin]]
+id = "steam3d/magicpods"
+name = "MagicPods"
+version = "1.0.0"
+plugin_api = 9
+author = "steam3d, andreylitvintsev, tomycostantino"
+license = "GPL-3.0"
+icon = "headphones"
+description = "Battery, noise control and connection management for AirPods, Beats and Galaxy Buds via the MagicPodsCore daemon."
+tags = ["bluetooth", "audio", "airpods", "headphones", "utility"]

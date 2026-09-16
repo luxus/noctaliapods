@@ -1,0 +1,17 @@
+[Unit]
+Description=MagicPodsCore daemon (AirPods / Beats / Galaxy Buds)
+Documentation=https://github.com/steam3d/MagicPodsCore
+After=bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+# Installed by integrations/noctalia/install.sh into the user's PATH.
+ExecStart=%h/.local/bin/magicpodscore
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
