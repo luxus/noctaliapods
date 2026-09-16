@@ -1,5 +1,21 @@
 # MagicPodsCore for Linux
 
+> **Not the Noctalia / lea AirPods bar path.** This repository is a
+> [steam3d/MagicPodsCore](https://github.com/steam3d/MagicPodsCore) fork
+> (WebSocket JSON daemon). It is **not** a port of
+> [thisisgm/omarchy-pods](https://github.com/thisisgm/omarchy-pods).
+>
+> Decision: **park** this tree as a Noctalia backend. The bar plugin
+> (`harveywuk/airpods` in [noctalia-dev/community-plugins](https://github.com/noctalia-dev/community-plugins))
+> reads omarchy `$XDG_STATE_HOME/librepods/status.json` and talks
+> `librepods-ctl` (`ca:`, `onebud:`, `adaptive:`, `ear:`). MagicPods
+> does not speak that IPC. Do not rewrite it into a second status
+> format. Packaging belongs on the harveywuk/librepods (or omarchy
+> daemon) track — see [AUDIT.md](./AUDIT.md).
+>
+> Draft [PR #1](https://github.com/luxus/noctaliapods/pull/1) (Luau +
+> Python WebSocket bridge) is the MagicPods frontend, not the lea path.
+
 Backend service exposing a WebSocket API for managing AirPods, Beats, and Galaxy Buds.
 
 ## 🎨 Features
